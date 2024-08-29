@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Text</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            color: white;
+            font-size: 4em; /* Increased font size */
+            font-family: Arial, sans-serif;
+        }
+        .letter {
+            display: inline-block;
+            transition: color 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+
+    <script>
+        const fullText = "A d u l t   S w i m"; // Text with spaces
+        const finalText = "[AS]";
+        const colors = ["red", "orange", "yellow", "green", "blue", "purple"];
+        const output = document.getElementById("output");
+
+        function printText(text, callback) {
+            for (let i = 0; i < text.length; i++) {
+                setTimeout(() => {
+                    const span = document.createElement("span");
+                    span.textContent = text[i];
+                    span.className = "letter";
+                    span.style.color = colors[i % colors.length];
+                    output.appendChild(span);
+                }, 150 * i); // Faster display (150ms)
+            }
+
+            // Start the callback after the text is fully displayed
+            setTimeout(callback, 150 * text.length);
+        }
+
+        function transitionToFinalText() {
+            output.innerHTML = ""; // Clear the previous text
+            printText(finalText, changeColors);
+
+            // Make final text disappear after 10 seconds
+            setTimeout(() => {
+                output.innerHTML = ""; // Clear the output
+                setTimeout(() => {
+                    startAnimation(); // Restart after 3 seconds
+                }, 3000); // Wait 3000ms (3 seconds)
+            }, 10000); // Wait 10000ms (10 seconds)
+        }
+
+        function changeColors() {
+            const letters = document.querySelectorAll('.letter');
+            setInterval(() => {
+                letters.forEach(letter => {
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    letter.style.color = randomColor;
+                });
+            }, 250); // Faster color change (250ms)
+        }
+
+        function startAnimation() {
+            output.innerHTML = ""; // Clear any previous text
+            setTimeout(() => {
+                printText(fullText, transitionToFinalText);
+            }, 3000); // Wait 3000ms (3 seconds) before starting
+        }
+
+        // Start the animation
+        startAnimation();
+    </script>
+</body>
+</html>
